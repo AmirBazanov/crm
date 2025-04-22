@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserCredential {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  AuthLog       AuthLog[]
+  refreshTokens RefreshToken[]
+
+  @@map("user_credentials")
+}
+
+model RefreshToken {
+  id        String         @id @default(uuid())
+  userId    String
+  token     String
+  userAgent String?
+  expiresAt DateTime
+  createdAt DateTime       @default(now())
+  ip        String?
+  updatedAt DateTime       @updatedAt
+  user      UserCredential @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AuthLog {
+  id        String         @id @default(uuid())
+  userId    String
+  type      LogType
+  success   Boolean
+  ip        String?
+  userAgent String?
+  createdAt DateTime       @default(now())
+  user      UserCredential @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum LogType {
+  LOGIN
+  LOGOUT
+  REFRESH
+  FAILED_LOGIN
+}
