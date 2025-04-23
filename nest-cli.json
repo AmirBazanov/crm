@@ -1,14 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/crm-system/src",
+  "sourceRoot": "apps/gateway/src",
+  "monorepo": true,
+  "root": "apps/gateway",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/crm-system/tsconfig.app.json"
+    "assets": [{
+      "include": "../../proto/*.proto",
+      "outDir": "dist/proto"
+    }
+    ]
   },
-  "monorepo": true,
-  "root": "apps/crm-system",
   "projects": {
     "auth": {
       "type": "application",
@@ -17,15 +21,6 @@
       "sourceRoot": "apps/auth/src",
       "compilerOptions": {
         "tsConfigPath": "apps/auth/tsconfig.app.json"
-      }
-    },
-    "crm-system": {
-      "type": "application",
-      "root": "apps/crm-system",
-      "entryFile": "main",
-      "sourceRoot": "apps/crm-system/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/crm-system/tsconfig.app.json"
       }
     },
     "gateway": {

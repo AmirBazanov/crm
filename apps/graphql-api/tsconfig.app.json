@@ -1,9 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
-    "outDir": "../../dist/apps/graphql-api"
+    "outDir": "../../dist/apps/auth"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "exclude": ["**/*.spec.ts", "test", "dist"]
 }
