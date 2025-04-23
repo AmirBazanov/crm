@@ -1,4 +1,4 @@
-import {IsEmail, IsHash, IsJWT, IsNotEmpty, MinLength, ValidateNested} from "class-validator";
+import {IsEmail, IsJWT, IsNotEmpty,  MinLength, ValidateNested} from "class-validator";
 import {UserGetDto} from "./user.dto";
 import {Type} from "class-transformer";
 
@@ -26,4 +26,27 @@ export class AuthLoginDto{
     email: string
     @IsNotEmpty()
     password: string
+}
+
+export class AuthRefreshDto{
+    @IsJWT()
+    refreshToken: string
+}
+
+export class AuthRefreshDtoResp{
+    @IsJWT()
+    accessToken: string
+    @IsJWT()
+    refreshToken: string
+}
+
+
+export class AuthLogoutDto{
+    @IsJWT()
+    refreshToken: string
+}
+
+export class AuthLogoutDtoResp{
+    @IsNotEmpty()
+    message: string
 }
