@@ -11,6 +11,7 @@ export function mapGrpcErrorToHttp(error: RpcException): HttpException {
   }
 
   const message: string = error.message || 'gRPC Error';
+  // @ts-ignore
   switch (error.code) {
     case GrpcStatus.NOT_FOUND:
       return new HttpException(message, HttpStatus.NOT_FOUND);
