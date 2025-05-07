@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package users;
+
+option go_package = "proto/users";
+
+// ENUM для стран
+enum Country {
+    COUNTRY_UNSPECIFIED = 0;
+    COUNTRY_EN = 1;
+    COUNTRY_IT = 2;
+    COUNTRY_FR = 3;
+    COUNTRY_DE = 4;
+}
+
+// Сообщение User
+message User {
+    string id = 1;
+    string firstname = 2;
+    string lastname = 3;
+    string nickname = 4;
+    string email = 5;
+    string password = 6;
+    Country country = 7;
+    string created_at = 8;
+    string updated_at = 9;
+}
+
+// Запрос на создание
+message CreateUserRequest {
+    string firstname = 1;
+    string lastname = 2;
+    string nickname = 3;
+    string email = 4;
+    string password = 5;
+    Country country = 6;
+}
+
+// Ответ на создание
+message CreateUserResponse {
+    User user = 1;
+}
+
+// Запрос на получение по ID
+message GetUserRequest {
+    string id = 1;
+}
+
+message GetUserResponse {
+    User user = 1;
+}
+
+// Запрос на обновление
+message UpdateUserRequest {
+    string id = 1;
+    string firstname = 2;
+    string lastname = 3;
+    string nickname = 4;
+    string email = 5;
+    Country country = 6;
+}
+
+message UpdateUserResponse {
+    User user = 1;
+}
+
+// Запрос на удаление
+message DeleteUserRequest {
+    string id = 1;
+}
+
+message DeleteUserResponse {
+    string message = 1;
+}
+
+// Запрос на получение всех
+message GetUsersRequest {
+
+}
+
+message GetUsersResponse {
+    repeated User users = 1;
+}
+
+// Запрос на поиск
+message SearchUsersRequest {
+    string city = 1;
+    string marital_status = 2;
+    string phone_number = 3;
+}
+
+message SearchUsersResponse {
+    repeated User users = 1;
+}
+
+// gRPC-сервис
+service UserService {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+    rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
+    rpc Search(SearchUsersRequest) returns (SearchUsersResponse);
+}
