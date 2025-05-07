@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package users;
 
-option go_package = "proto/users";
+option go_package = "proto/go";
 
 // ENUM для стран
 enum Country {
@@ -11,6 +11,7 @@ enum Country {
     COUNTRY_IT = 2;
     COUNTRY_FR = 3;
     COUNTRY_DE = 4;
+    COUNTRY_RU = 5;
 }
 
 // Сообщение User
