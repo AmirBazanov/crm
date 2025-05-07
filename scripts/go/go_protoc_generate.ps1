@@ -1,0 +1,2 @@
+protoc -I ../../proto ../../proto/*.proto --go_out=../../proto/generated/go --go_opt=paths=source_relative --go-grpc_out=../../proto/generated/go --go-grpc_opt=paths=source_relative;
+Write-Output "ALL DONE"
