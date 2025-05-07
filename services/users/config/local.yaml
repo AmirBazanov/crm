@@ -1,0 +1,5 @@
+env: "local"
+db_url: "postgres://postgres:postgres@localhost:5432/users"
+grpc:
+  port: 4000
+  timeout: 10h
