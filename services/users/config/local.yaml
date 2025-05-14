@@ -3,3 +3,7 @@ db_url: "postgres://postgres:postgres@localhost:5432/users"
 grpc:
   port: 4000
   timeout: 10h
+logger:
+  service: "users"
+  log_level: "debug"
+  log_file: "logs/users.log"
