@@ -8,14 +8,21 @@ import (
 )
 
 type Config struct {
-	Env   string     `yaml:"env" env-default:"local"`
-	DbUrl string     `yaml:"db_url" env-required:"true"`
-	GRPC  GRPCConfig `yaml:"grpc"`
+	Env    string       `yaml:"env" env-default:"local"`
+	DbUrl  string       `yaml:"db_url" env-required:"true"`
+	GRPC   GRPCConfig   `yaml:"grpc"`
+	Logger LoggerConfig `yaml:"logger"`
 }
 
 type GRPCConfig struct {
 	Port    int           `yaml:"port" env-default:"4000"`
 	Timeout time.Duration `yaml:"timeout" env-default:"10h"`
+}
+
+type LoggerConfig struct {
+	Service  string `yaml:"service" env-default:"users"`
+	LogLevel string `yaml:"log_level" env-default:"debug"`
+	LogFile  string `yaml:"log_file" env-default:"logs/users.log"`
 }
 
 func MustLoad() *Config {
