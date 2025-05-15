@@ -91,9 +91,11 @@ export interface GetUsersResponse {
 
 /** Запрос на поиск */
 export interface SearchUsersRequest {
-  city: string;
-  maritalStatus: string;
-  phoneNumber: string;
+  city?: string | undefined;
+  nickname?: string | undefined;
+  email?: string | undefined;
+  firstname?: string | undefined;
+  lastname?: string | undefined;
 }
 
 export interface SearchUsersResponse {

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package users;
 
-option go_package = "proto/go";
+option go_package = "crm-system/proto/generated/go/usersv1;usersv1";
 
 // ENUM для стран
 enum Country {
@@ -85,9 +85,11 @@ message GetUsersResponse {
 
 // Запрос на поиск
 message SearchUsersRequest {
-    string city = 1;
-    string marital_status = 2;
-    string phone_number = 3;
+    optional string city = 1;
+    optional string nickname = 2;
+    optional string email = 3;
+    optional string firstname = 4;
+    optional string lastname = 5;
 }
 
 message SearchUsersResponse {

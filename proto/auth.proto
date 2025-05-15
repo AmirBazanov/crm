@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "proto/go";
+option go_package = "crm-system/proto/generated/go/authv1;authv1";
+
 
 message User {
   string id = 1;
