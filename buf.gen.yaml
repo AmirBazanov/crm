@@ -8,8 +8,8 @@ plugins:
 #  - remote: buf.build/connectrpc/go
 #    out: proto/gen/go
 #    opt: paths=source_relative
-  - remote: buf.build/bufbuild/es:v1.9.0
-    opt: target=ts
+  - local: protoc-gen-ts_proto
+    opt: nestJs=true
     out: proto/gen/ts
   - local: protoc-gen-go
     out: proto/gen/go
