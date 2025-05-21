@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package users;
+package users.v1;
 
-option go_package = "crm-system/proto/generated/go/usersv1;usersv1";
+option go_package = "crm/proto/gen/go/users/v1;userspb";
 
 // ENUM для стран
 enum Country {
