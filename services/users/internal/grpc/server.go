@@ -2,7 +2,7 @@ package users
 
 import (
 	"context"
-	usersv1 "crm/proto/generated/go/usersv1"
+	usersv1 "crm/proto/gen/go/users/v1"
 
 	"google.golang.org/grpc"
 )
