@@ -3,7 +3,7 @@ import { GrpcMethod } from '@nestjs/microservices';
 import {
   AuthRegisterRequest,
   AuthServiceController,
-} from '../../../proto/generated/auth';
+} from '../../../proto/gen/ts/auth/v1/auth';
 import { AuthService } from './auth.service';
 
 @Controller()
