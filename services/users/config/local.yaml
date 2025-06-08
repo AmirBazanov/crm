@@ -6,4 +6,4 @@ grpc:
 logger:
   service: "users"
   log_level: "debug"
-  log_file: "logs/users.log"
+  log_file: "../../logs/users.log"

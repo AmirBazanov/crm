@@ -7,9 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "protoc:nest": "npx protoc --plugin=protoc-gen-ts_proto=\".\\\\node_modules\\\\.bin\\\\protoc-gen-ts_proto.cmd\" --ts_proto_out=./proto/generated --ts_proto_opt=nestJs=true --proto_path=./proto proto/*.proto",
-    "copy:proto": "powershell.exe -Command \"New-Item -ItemType Directory -Force -Path dist/proto; Copy-Item -Path proto\\*.proto -Destination dist/proto -Recurse\"",
+    "copy:proto": "powershell.exe -Command \"Copy-Item -Path proto/ -filter *.proto -Destination dist/proto -Recurse\"",
     "protoc:go": "powershell.exe scripts/go/go_protoc_generate.ps1",
-    "go:users": "go run services/users/cmd/users/main.go --config=services/users/config/local.yaml",
+    "go:users": "(cd services/users && air && cd -)",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
