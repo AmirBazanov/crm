@@ -3,32 +3,22 @@ package users
 import (
 	"context"
 	usersv1 "crm/proto/gen/go/users/v1"
-
 	"google.golang.org/grpc"
+	"log/slog"
 )
 
 type serverAPI struct {
 	usersv1.UnimplementedUserServiceServer
+	logger *slog.Logger
 }
 
-func Register(gRPC *grpc.Server) {
-	usersv1.RegisterUserServiceServer(gRPC, &serverAPI{})
+func Register(gRPC *grpc.Server, logger *slog.Logger) {
+
+	usersv1.RegisterUserServiceServer(gRPC, &serverAPI{logger: logger})
 }
 
 func (s *serverAPI) CreateUser(ctx context.Context, req *usersv1.CreateUserRequest) (*usersv1.CreateUserResponse, error) {
-	return &usersv1.CreateUserResponse{
-		User: &usersv1.User{
-			Id:        "1",
-			Firstname: "OOO",
-			Lastname:  "",
-			Nickname:  "",
-			Email:     "",
-			Password:  "",
-			Country:   5,
-			CreatedAt: "",
-			UpdatedAt: "",
-		},
-	}, nil
+	panic("implement me")
 }
 
 func (s *serverAPI) GetUser(ctx context.Context, req *usersv1.GetUserRequest) (*usersv1.GetUserResponse, error) {
