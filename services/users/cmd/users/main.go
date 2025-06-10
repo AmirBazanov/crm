@@ -2,9 +2,6 @@ package main
 
 import (
 	gologger "crm/go-libs/logger"
-	migratorgorm "crm/go-libs/migrator"
-	gormstorage "crm/go-libs/storage/gorm"
-	databaseusers "crm/services/users/database"
 	"crm/services/users/internal/app"
 	"crm/services/users/internal/config"
 	"log/slog"
@@ -14,11 +11,10 @@ import (
 )
 
 func main() {
+
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
-	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl)
-	db := gormstorage.New(logger, cfg.DbUrl)
-	migratorgorm.Migrate(db.DB, &databaseusers.Countries{}, &databaseusers.Users{})
+	application := app.New(logger, cfg.GRPC.Port)
 	go application.GRPCSrv.MustRun()
 	GrpcStop(application, logger)
 }
