@@ -4,14 +4,14 @@ import (
 	"context"
 	"crm/go-libs/storage/constants"
 	databaseusers "crm/services/users/database"
-	postgres_gorm "crm/services/users/internal/storage/postgres-gorm"
+	postgresgorm "crm/services/users/internal/storage/postgres-gorm"
 	"errors"
 	"log/slog"
 )
 
 type User struct {
 	logger *slog.Logger
-	db     *postgres_gorm.Storage
+	db     *postgresgorm.Storage
 }
 
 type UserCreate interface {
@@ -34,7 +34,7 @@ type SearchByCredentials interface {
 	SearchUserByCredentials(ctx context.Context, usersCred *databaseusers.Users) (users *databaseusers.Users, err error)
 }
 
-func New(logger *slog.Logger, db *postgres_gorm.Storage) *User {
+func New(logger *slog.Logger, db *postgresgorm.Storage) *User {
 	return &User{
 		logger: logger,
 		db:     db,
