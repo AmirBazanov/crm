@@ -9,7 +9,7 @@ type App struct {
 	GRPCSrv *grpcusers.App
 }
 
-func New(logger *slog.Logger, grpcPort int, dbPath string) *App {
+func New(logger *slog.Logger, grpcPort int) *App {
 
 	grpcApp := grpcusers.New(logger, grpcPort)
 
