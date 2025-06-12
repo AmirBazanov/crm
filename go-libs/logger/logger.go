@@ -6,6 +6,7 @@ import (
 	"io"
 	"log/slog"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -92,9 +93,14 @@ func createHandler(level slog.Level, service string, logFile string) slog.Handle
 	if logFile == "" {
 		logFile = os.Getenv("LOG_FILE")
 	}
-	file, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	dir := filepath.Dir(logFile)
+	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
-		panic("could not open log file: " + err.Error())
+		panic("could not open log folder: " + err.Error())
+	}
+	file, errF := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if errF != nil {
+		panic("could not open log file: " + errF.Error())
 	}
 
 	writer := io.MultiWriter(os.Stdout, file)
