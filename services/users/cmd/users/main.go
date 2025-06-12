@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-
+	//TODO: DB HEALTH CHECK
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
 	application := app.New(logger, cfg.GRPC.Port)
