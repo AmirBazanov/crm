@@ -11,6 +11,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log/slog"
+	"strconv"
 )
 
 type Storage struct {
@@ -37,7 +38,7 @@ func (s *Storage) UserCreate(ctx context.Context, users *databaseusers.Users) (i
 		s.logger.Error(op, result.Error)
 		return "", result.Error
 	}
-	return id, nil
+	return strconv.Itoa(int(users.ID)), nil
 }
 
 func (s *Storage) UserByEmail(ctx context.Context, email string) (users *databaseusers.Users, err error) {
