@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package users.v2;
 
-option go_package = "crm/proto/gen/go/users/v2;userspb";
+import "buf/validate/validate.proto";
 
 // ENUM для стран
 enum Country {
@@ -16,34 +16,34 @@ enum Country {
 
 // Сообщение User
 message User {
-    string id = 1;
-    string firstname = 2;
-    string lastname = 3;
-    string nickname = 4;
-    string email = 5;
-    Country country = 6;
-    string created_at = 7;
+    string id = 1 [(buf.validate.field).string.uuid=true];
+    string firstname = 2 [(buf.validate.field).string.min_len=3];
+    string lastname = 3 [(buf.validate.field).string.min_len=3];
+    string nickname = 4 [(buf.validate.field).string.min_len=3];
+    string email = 5 [(buf.validate.field).string.email=true];
+    Country country = 6 [(buf.validate.field).enum.example=1];
+    string created_at = 7 ;
     string updated_at = 8;
 }
 
 // Запрос на создание
 message CreateUserRequest {
-    string firstname = 1;
-    string lastname = 2;
-    string nickname = 3;
-    string email = 4;
-    string password = 5;
-    Country country = 6;
+    string firstname = 1[(buf.validate.field).string.min_len=3];
+    string lastname = 2[(buf.validate.field).string.min_len=3];
+    string nickname = 3[(buf.validate.field).string.min_len=3];
+    string email = 4  [(buf.validate.field).string.email=true];
+    string password = 5 ;
+    Country country = 6 [(buf.validate.field).enum.example=1];
 }
 
 // Ответ на создание
 message CreateUserResponse {
-    string id = 1;
+    string id = 1 [(buf.validate.field).string.uuid=true];
 }
 
 // Запрос на получение по ID
 message GetUserRequest {
-    string id = 1;
+    string id = 1 [(buf.validate.field).string.uuid=true];
 }
 
 message GetUserResponse {
@@ -52,12 +52,12 @@ message GetUserResponse {
 
 // Запрос на обновление
 message UpdateUserRequest {
-    string id = 1;
-    string firstname = 2;
-    string lastname = 3;
-    string nickname = 4;
-    string email = 5;
-    Country country = 6;
+    string id = 1 [(buf.validate.field).string.uuid=true];
+    string firstname = 2[(buf.validate.field).string.min_len=3];
+    string lastname = 3[(buf.validate.field).string.min_len=3];
+    string nickname = 4[(buf.validate.field).string.min_len=3];
+    string email = 5[(buf.validate.field).string.email=true];
+    Country country = 6[(buf.validate.field).enum.example=1];
 }
 
 message UpdateUserResponse {
@@ -66,11 +66,11 @@ message UpdateUserResponse {
 
 // Запрос на удаление
 message DeleteUserRequest {
-    string id = 1;
+    string id = 1[(buf.validate.field).string.uuid=true];
 }
 
 message DeleteUserResponse {
-    string message = 1;
+    string message = 1 [(buf.validate.field).string.min_len=1];
 }
 
 // Запрос на получение всех
@@ -84,11 +84,11 @@ message GetUsersResponse {
 
 // Запрос на поиск
 message SearchUsersRequest {
-    optional string city = 1;
-    optional string nickname = 2;
-    optional string email = 3;
-    optional string firstname = 4;
-    optional string lastname = 5;
+    optional string city = 1[(buf.validate.field).string.min_len=3];
+    optional string nickname = 2[(buf.validate.field).string.min_len=3];
+    optional string email = 3[(buf.validate.field).string.email=true];
+    optional string firstname = 4[(buf.validate.field).string.min_len=3];
+    optional string lastname = 5[(buf.validate.field).string.min_len=3];
 }
 
 message SearchUsersResponse {
