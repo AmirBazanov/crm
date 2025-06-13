@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package users.v1;
+package users.v2;
 
-option go_package = "crm/proto/gen/go/users/v1;userspb";
+option go_package = "crm/proto/gen/go/users/v2;userspb";
 
 // ENUM для стран
 enum Country {
@@ -21,10 +21,9 @@ message User {
     string lastname = 3;
     string nickname = 4;
     string email = 5;
-    string password = 6;
-    Country country = 7;
-    string created_at = 8;
-    string updated_at = 9;
+    Country country = 6;
+    string created_at = 7;
+    string updated_at = 8;
 }
 
 // Запрос на создание
@@ -39,7 +38,7 @@ message CreateUserRequest {
 
 // Ответ на создание
 message CreateUserResponse {
-    User user = 1;
+    string id = 1;
 }
 
 // Запрос на получение по ID
