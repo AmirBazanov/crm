@@ -2,13 +2,13 @@
 // versions:
 //   protoc-gen-ts_proto  v2.7.0
 //   protoc               unknown
-// source: users/v1/users.proto
+// source: users/v2/users.proto
 
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
-export const protobufPackage = "users.v1";
+export const protobufPackage = "users.v2";
 
 /** ENUM для стран */
 export enum Country {
@@ -28,7 +28,6 @@ export interface User {
   lastname: string;
   nickname: string;
   email: string;
-  password: string;
   country: Country;
   createdAt: string;
   updatedAt: string;
@@ -46,7 +45,7 @@ export interface CreateUserRequest {
 
 /** Ответ на создание */
 export interface CreateUserResponse {
-  user: User | undefined;
+  id: string;
 }
 
 /** Запрос на получение по ID */
@@ -102,7 +101,7 @@ export interface SearchUsersResponse {
   users: User[];
 }
 
-export const USERS_V1_PACKAGE_NAME = "users.v1";
+export const USERS_V2_PACKAGE_NAME = "users.v2";
 
 /** gRPC-сервис */
 

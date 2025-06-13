@@ -7,7 +7,7 @@ import (
 
 type Users struct {
 	gorm.Model
-	ID        uint `gorm:"primaryKey;auto_increment"`
+	ID        int `gorm:"primaryKey;auto_increment"`
 	FirstName string
 	LastName  string
 	Nickname  string `gorm:"unique"`
