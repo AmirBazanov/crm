@@ -18,15 +18,9 @@ type UserCreate interface {
 	UserCreate(ctx context.Context, users *databaseusers.Users) (id string, err error)
 }
 
-type UserGetById interface {
+type UserGetBy interface {
 	UserByID(ctx context.Context, id string) (users *databaseusers.Users, err error)
-}
-
-type UserGetByName interface {
 	UserByUsername(ctx context.Context, username string) (users *databaseusers.Users, err error)
-}
-
-type UserGetByEmail interface {
 	UserByEmail(ctx context.Context, email string) (users *databaseusers.Users, err error)
 }
 
