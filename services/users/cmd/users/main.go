@@ -14,7 +14,7 @@ func main() {
 	//TODO: DB HEALTH CHECK
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
-	application := app.New(logger, cfg.GRPC.Port)
+	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl)
 	go application.GRPCSrv.MustRun()
 	GrpcStop(application, logger)
 }

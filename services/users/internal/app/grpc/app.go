@@ -14,9 +14,9 @@ type App struct {
 	port       int
 }
 
-func New(log *slog.Logger, port int) *App {
+func New(log *slog.Logger, port int, userService users.User) *App {
 	gRPCServer := grpc.NewServer()
-	users.Register(gRPCServer, log)
+	users.Register(gRPCServer, log, userService)
 	return &App{log, gRPCServer, port}
 }
 func (a *App) MustRun() {
