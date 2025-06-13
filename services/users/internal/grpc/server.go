@@ -1,6 +1,7 @@
 package users
 
 import (
+	"buf.build/go/protovalidate"
 	"context"
 	"crm/go-libs/storage/constants"
 	usersv2 "crm/proto/gen/go/users/v2"
@@ -32,6 +33,15 @@ func Register(gRPC *grpc.Server, logger *slog.Logger, user User) {
 // TODO: PROTO VALIDATION
 
 func (s *serverAPI) CreateUser(ctx context.Context, req *usersv2.CreateUserRequest) (*usersv2.CreateUserResponse, error) {
+	// TODO: IMPLEMENT PROTO VALIDATION CORRECTLY
+	v, errV := protovalidate.New()
+	if errV != nil {
+		panic(errV)
+	}
+	err := v.Validate(req)
+	if err != nil {
+		return nil, err
+	}
 	op := "server.CreateUser"
 	userReq := &databaseusers.Users{
 		FirstName: req.Firstname,
