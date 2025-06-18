@@ -100,3 +100,31 @@ func (s *Storage) SearchUserByCredentials(ctx context.Context, usersCred *databa
 	}
 	return users, nil
 }
+
+func (s *Storage) UserUpdate(ctx context.Context, users *databaseusers.Users) (user *databaseusers.Users, err error) {
+	const op = "storage.postgresgorm.UserUpdate"
+	result := s.db.Model(&databaseusers.Users{}).Where("id = ?", users.ID).Updates(users)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			s.logger.Error(op, gorm.ErrRecordNotFound)
+			return nil, constants.ErrUserNotFound
+		}
+		s.logger.Error(op, result.Error)
+		return nil, result.Error
+	}
+	return users, nil
+}
+
+func (s *Storage) UserDelete(ctx context.Context, id string) (err error) {
+	const op = "storage.postgresgorm.UserDelete"
+	result := s.db.Delete(&databaseusers.Users{}, id)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			s.logger.Error(op, gorm.ErrRecordNotFound)
+			return constants.ErrUserNotFound
+		}
+		s.logger.Error(op, result.Error)
+		return result.Error
+	}
+	return nil
+}
