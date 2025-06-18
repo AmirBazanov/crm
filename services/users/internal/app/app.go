@@ -13,6 +13,7 @@ type App struct {
 
 func New(logger *slog.Logger, grpcPort int, dbUrl string) *App {
 	storage, err := postgresgorm.New(logger, dbUrl)
+
 	if err != nil {
 		panic(err)
 	}
