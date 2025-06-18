@@ -2,6 +2,8 @@ package main
 
 import (
 	gologger "crm/go-libs/logger"
+	migratorgorm "crm/go-libs/migrator"
+	databaseusers "crm/services/users/database"
 	"crm/services/users/internal/app"
 	"crm/services/users/internal/config"
 	"log/slog"
@@ -14,6 +16,7 @@ func main() {
 	//TODO: DB HEALTH CHECK
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
+	migratorgorm.Migrate(cfg.DbUrl, logger, &databaseusers.Countries{}, &databaseusers.Users{})
 	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl)
 	go application.GRPCSrv.MustRun()
 	GrpcStop(application, logger)
