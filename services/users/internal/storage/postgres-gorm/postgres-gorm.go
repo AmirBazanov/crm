@@ -11,7 +11,6 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log/slog"
-	"strconv"
 )
 
 type Storage struct {
@@ -27,18 +26,18 @@ func New(log *slog.Logger, dbUrl string) (*Storage, error) {
 	return &Storage{db: db, logger: log}, nil
 }
 
-func (s *Storage) UserCreate(ctx context.Context, users *databaseusers.Users) (id string, err error) {
+func (s *Storage) UserCreate(ctx context.Context, users *databaseusers.Users) (id uint32, err error) {
 	const op = "storage.postgresgorm.SaveUser"
 	result := s.db.Create(&users)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrCheckConstraintViolated) {
 			s.logger.Error(op, gorm.ErrCheckConstraintViolated)
-			return "", constants.ErrUserAlreadyExists
+			return -0, constants.ErrUserAlreadyExists
 		}
 		s.logger.Error(op, result.Error)
-		return "", result.Error
+		return -0, result.Error
 	}
-	return strconv.Itoa(int(users.ID)), nil
+	return users.ID, nil
 }
 
 func (s *Storage) UserByEmail(ctx context.Context, email string) (users *databaseusers.Users, err error) {
@@ -56,7 +55,7 @@ func (s *Storage) UserByEmail(ctx context.Context, email string) (users *databas
 	return users, nil
 }
 
-func (s *Storage) UserByID(ctx context.Context, id string) (users *databaseusers.Users, err error) {
+func (s *Storage) UserByID(ctx context.Context, id uint32) (users *databaseusers.Users, err error) {
 	const op = "storage.postgresgorm.UserByID"
 	users = &databaseusers.Users{}
 	result := s.db.Where("id = ?", id).First(users)
@@ -87,9 +86,9 @@ func (s *Storage) UserByUsername(ctx context.Context, username string) (users *d
 	return users, nil
 }
 
-func (s *Storage) SearchUserByCredentials(ctx context.Context, usersCred *databaseusers.Users) (users *databaseusers.Users, err error) {
+func (s *Storage) SearchUserByCredentials(ctx context.Context, usersCred *databaseusers.Users) (users []*databaseusers.Users, err error) {
 	const op = "storage.postgresgorm.SearchUserByCredentials"
-	result := s.db.Find(&usersCred)
+	result := s.db.Where(&usersCred).Find(&users)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			s.logger.Error(op, gorm.ErrRecordNotFound)
@@ -115,7 +114,7 @@ func (s *Storage) UserUpdate(ctx context.Context, users *databaseusers.Users) (u
 	return users, nil
 }
 
-func (s *Storage) UserDelete(ctx context.Context, id string) (err error) {
+func (s *Storage) UserDelete(ctx context.Context, id uint32) (err error) {
 	const op = "storage.postgresgorm.UserDelete"
 	result := s.db.Delete(&databaseusers.Users{}, id)
 	if result.Error != nil {
@@ -127,4 +126,19 @@ func (s *Storage) UserDelete(ctx context.Context, id string) (err error) {
 		return result.Error
 	}
 	return nil
+}
+
+func (s *Storage) UsersGet(ctx context.Context) (users []*databaseusers.Users, err error) {
+	const op = "storage.postgresgorm.UsersGet"
+
+	result := s.db.Find(&users)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			s.logger.Error(op, gorm.ErrRecordNotFound)
+			return nil, constants.ErrUserNotFound
+		}
+		s.logger.Error(op, result.Error)
+		return nil, result.Error
+	}
+	return users, nil
 }
