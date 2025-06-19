@@ -2,13 +2,13 @@
 // versions:
 //   protoc-gen-ts_proto  v2.7.0
 //   protoc               unknown
-// source: users/v2/users.proto
+// source: users/v3/users.proto
 
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
-export const protobufPackage = "users.v2";
+export const protobufPackage = "users.v3";
 
 /** ENUM для стран */
 export enum Country {
@@ -23,7 +23,7 @@ export enum Country {
 
 /** Сообщение User */
 export interface User {
-  id: string;
+  id: number;
   firstname: string;
   lastname: string;
   nickname: string;
@@ -45,12 +45,12 @@ export interface CreateUserRequest {
 
 /** Ответ на создание */
 export interface CreateUserResponse {
-  id: string;
+  id: number;
 }
 
 /** Запрос на получение по ID */
 export interface GetUserRequest {
-  id: string;
+  id: number;
 }
 
 export interface GetUserResponse {
@@ -59,7 +59,7 @@ export interface GetUserResponse {
 
 /** Запрос на обновление */
 export interface UpdateUserRequest {
-  id: string;
+  id: number;
   firstname: string;
   lastname: string;
   nickname: string;
@@ -73,11 +73,11 @@ export interface UpdateUserResponse {
 
 /** Запрос на удаление */
 export interface DeleteUserRequest {
-  id: string;
+  id: number;
 }
 
 export interface DeleteUserResponse {
-  message: string;
+  id: number;
 }
 
 /** Запрос на получение всех */
@@ -90,7 +90,7 @@ export interface GetUsersResponse {
 
 /** Запрос на поиск */
 export interface SearchUsersRequest {
-  city?: string | undefined;
+  country?: Country | undefined;
   nickname?: string | undefined;
   email?: string | undefined;
   firstname?: string | undefined;
@@ -101,7 +101,7 @@ export interface SearchUsersResponse {
   users: User[];
 }
 
-export const USERS_V2_PACKAGE_NAME = "users.v2";
+export const USERS_V3_PACKAGE_NAME = "users.v3";
 
 /** gRPC-сервис */
 
