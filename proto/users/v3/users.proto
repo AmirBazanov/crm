@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package users.v2;
+package users.v3;
 
 import "buf/validate/validate.proto";
 
@@ -16,7 +16,7 @@ enum Country {
 
 // Сообщение User
 message User {
-    string id = 1 [(buf.validate.field).string.uuid=true];
+    uint32 id = 1 [(buf.validate.field).uint32.gte=0];
     string firstname = 2 [(buf.validate.field).string.min_len=3];
     string lastname = 3 [(buf.validate.field).string.min_len=3];
     string nickname = 4 [(buf.validate.field).string.min_len=3];
@@ -38,12 +38,12 @@ message CreateUserRequest {
 
 // Ответ на создание
 message CreateUserResponse {
-    string id = 1 [(buf.validate.field).string.uuid=true];
+    uint32 id = 1 [(buf.validate.field).uint32.gte=0];
 }
 
 // Запрос на получение по ID
 message GetUserRequest {
-    string id = 1 [(buf.validate.field).string.uuid=true];
+    uint32 id = 1 [(buf.validate.field).uint32.gte=0];
 }
 
 message GetUserResponse {
@@ -52,7 +52,7 @@ message GetUserResponse {
 
 // Запрос на обновление
 message UpdateUserRequest {
-    string id = 1 [(buf.validate.field).string.uuid=true];
+    uint32 id = 1 [(buf.validate.field).uint32.gte=0];
     string firstname = 2[(buf.validate.field).string.min_len=3];
     string lastname = 3[(buf.validate.field).string.min_len=3];
     string nickname = 4[(buf.validate.field).string.min_len=3];
@@ -66,11 +66,11 @@ message UpdateUserResponse {
 
 // Запрос на удаление
 message DeleteUserRequest {
-    string id = 1[(buf.validate.field).string.uuid=true];
+    uint32 id = 1 [(buf.validate.field).uint32.gte=0];
 }
 
 message DeleteUserResponse {
-    string message = 1 [(buf.validate.field).string.min_len=1];
+    uint32 id = 1 [(buf.validate.field).uint32.gte=0];
 }
 
 // Запрос на получение всех
@@ -84,7 +84,7 @@ message GetUsersResponse {
 
 // Запрос на поиск
 message SearchUsersRequest {
-    optional string city = 1[(buf.validate.field).string.min_len=3];
+    optional Country country = 6[(buf.validate.field).enum.example=1];
     optional string nickname = 2[(buf.validate.field).string.min_len=3];
     optional string email = 3[(buf.validate.field).string.email=true];
     optional string firstname = 4[(buf.validate.field).string.min_len=3];
