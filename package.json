@@ -10,6 +10,7 @@
     "copy:proto": "powershell.exe -Command \"Copy-Item -Path proto/ -filter *.proto -Destination dist/proto -Recurse\"",
     "protoc:go": "powershell.exe scripts/go/go_protoc_generate.ps1",
     "go:users": "(cd services/users && air && cd -)",
+    "go:test:users": "go test crm/services/users/tests",
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
