@@ -26,7 +26,7 @@ jobs:
 
     - name: Run gRPC server in background
       run: |
-        ./users --config=./crm/services/users/config/local_git.yaml &
+        ./users --config=crm/services/users/config/local_git.yaml &
         sleep 2 
 
     - name: Test
