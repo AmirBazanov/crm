@@ -7,7 +7,9 @@ toolchain go1.23.9
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250613105001-9f2d3c737feb.1
 	buf.build/go/protovalidate v0.13.1
+	github.com/brianvoe/gofakeit v3.18.0+incompatible
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	github.com/stretchr/testify v1.10.0
 	google.golang.org/grpc v1.72.0
 	google.golang.org/protobuf v1.36.6
 	gorm.io/driver/postgres v1.5.11
@@ -18,6 +20,7 @@ require (
 	cel.dev/expr v0.23.1 // indirect
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/cel-go v0.25.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
@@ -26,6 +29,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
 	golang.org/x/crypto v0.33.0 // indirect
