@@ -3,7 +3,7 @@ package app
 import (
 	grpcusers "crm/services/users/internal/app/grpc"
 	"crm/services/users/internal/services/users"
-	postgresgorm "crm/services/users/internal/storage/postgres-gorm"
+	postgresgorm "crm/services/users/internal/storage/postgres_gorm"
 	"log/slog"
 )
 

@@ -1,7 +1,7 @@
 package grpcusers
 
 import (
-	interceptorsvalidator "crm/go-libs/interceptors"
+	interceptorsvalidator "crm/go_libs/interceptors"
 	users "crm/services/users/internal/grpc"
 	"fmt"
 	"google.golang.org/grpc"

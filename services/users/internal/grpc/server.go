@@ -2,10 +2,10 @@ package users
 
 import (
 	"context"
-	_map "crm/go-libs/helpers/map"
-	"crm/go-libs/helpers/pointercheck"
+	_map "crm/go_libs/helpers/map"
+	"crm/go_libs/helpers/pointercheck"
 
-	"crm/go-libs/storage/constants"
+	"crm/go_libs/storage/constants"
 	usersv3 "crm/proto/gen/go/users/v3"
 	databaseusers "crm/services/users/database"
 	"crm/services/users/internal/tools/convert"

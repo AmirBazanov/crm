@@ -2,9 +2,9 @@ package users
 
 import (
 	"context"
-	"crm/go-libs/storage/constants"
+	"crm/go_libs/storage/constants"
 	databaseusers "crm/services/users/database"
-	postgresgorm "crm/services/users/internal/storage/postgres-gorm"
+	postgresgorm "crm/services/users/internal/storage/postgres_gorm"
 	"errors"
 	"log/slog"
 )

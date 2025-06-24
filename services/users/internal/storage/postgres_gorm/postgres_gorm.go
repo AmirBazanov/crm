@@ -2,9 +2,9 @@ package postgres_gorm
 
 import (
 	"context"
-	"crm/go-libs/storage/constants"
-	"crm/go-libs/storage/slogapapter"
-	_ "crm/go-libs/storage/slogapapter"
+	"crm/go_libs/storage/constants"
+	"crm/go_libs/storage/slogapapter"
+	_ "crm/go_libs/storage/slogapapter"
 	databaseusers "crm/services/users/database"
 	"errors"
 	"fmt"

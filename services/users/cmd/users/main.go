@@ -1,8 +1,8 @@
 package main
 
 import (
-	gologger "crm/go-libs/logger"
-	migratorgorm "crm/go-libs/migrator"
+	gologger "crm/go_libs/logger"
+	migratorgorm "crm/go_libs/migrator"
 	databaseusers "crm/services/users/database"
 	"crm/services/users/internal/app"
 	"crm/services/users/internal/config"

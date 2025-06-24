@@ -1,7 +1,7 @@
 package gormstorage_slogadapter
 
 import (
-	"crm/go-libs/storage/slogapapter"
+	"crm/go_libs/storage/slogapapter"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log/slog"
