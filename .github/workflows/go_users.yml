@@ -22,11 +22,11 @@ jobs:
         go-version: '1.23'
 
     - name: Build
-      run: go build crm/services/users/cmd/users
+      run: go build -o users crm/services/users/cmd/users
 
     - name: Run gRPC server in background
       run: |
-        go run users --config=./config/local_git.yaml &
+        ./users --config=crm/services/users/config/local_git.yaml &
         sleep 2 
 
     - name: Test
