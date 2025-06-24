@@ -49,6 +49,7 @@ func (s *serverAPI) CreateUser(ctx context.Context, req *usersv3.CreateUserReque
 		Password:  req.Password,
 		Country:   int(req.Country),
 	}
+	//TODO: FIX Unspecified country
 	user, err := s.user.Create(ctx, userReq)
 	if errors.Is(err, constants.ErrUserAlreadyExists) {
 		s.logger.Error(op, err)
