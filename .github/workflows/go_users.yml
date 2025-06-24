@@ -22,7 +22,7 @@ jobs:
         go-version: '1.23'
 
     - name: Build
-      run: go build crm/services/users/cmd/users/main.go
+      run: go build crm/services/users/cmd/users
 
     - name: Test
       run: go test crm/services/users/tests
