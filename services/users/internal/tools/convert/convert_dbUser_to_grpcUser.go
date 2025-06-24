@@ -12,7 +12,7 @@ func UserDbtoGrpcUser(user *databaseusers.Users) *usersv3.User {
 		Lastname:  user.LastName,
 		Nickname:  user.Nickname,
 		Email:     user.Email,
-		Country:   usersv3.Country(user.Country),
+		Country:   usersv3.Country(user.Country - 1),
 		CreatedAt: user.CreatedAt.String(),
 		UpdatedAt: user.UpdatedAt.String(),
 	}

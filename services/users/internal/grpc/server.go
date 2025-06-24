@@ -47,7 +47,7 @@ func (s *serverAPI) CreateUser(ctx context.Context, req *usersv3.CreateUserReque
 		Nickname:  req.Nickname,
 		Email:     req.Email,
 		Password:  req.Password,
-		Country:   int(req.Country),
+		Country:   int(req.Country) + 1,
 	}
 	//TODO: FIX Unspecified country
 	user, err := s.user.Create(ctx, userReq)
