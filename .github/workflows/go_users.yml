@@ -24,5 +24,10 @@ jobs:
     - name: Build
       run: go build crm/services/users/cmd/users
 
+    - name: Run gRPC server in background
+      run: |
+        go run ./cmd/server/main.go --config=./config/local_git.yaml &
+        sleep 2 
+
     - name: Test
       run: go test crm/services/users/tests
