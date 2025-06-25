@@ -6,3 +6,7 @@ func DerefOrDefault[T any](ptr *T, def T) T {
 	}
 	return *ptr
 }
+
+func ToPtr[T any](v T) *T {
+	return &v
+}

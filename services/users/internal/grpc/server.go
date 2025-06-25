@@ -49,7 +49,6 @@ func (s *serverAPI) CreateUser(ctx context.Context, req *usersv3.CreateUserReque
 		Password:  req.Password,
 		Country:   int(req.Country) + 1,
 	}
-	//TODO: FIX Unspecified country
 	user, err := s.user.Create(ctx, userReq)
 	if errors.Is(err, constants.ErrUserAlreadyExists) {
 		s.logger.Error(op, err)
@@ -98,7 +97,7 @@ func (s *serverAPI) UpdateUser(ctx context.Context, req *usersv3.UpdateUserReque
 	return &usersv3.UpdateUserResponse{User: convert.UserDbtoGrpcUser(user)}, nil
 }
 
-func (s *serverAPI) GetUsers(ctx context.Context, req *usersv3.GetUsersRequest) (*usersv3.GetUsersResponse, error) {
+func (s *serverAPI) GetUsers(ctx context.Context, _ *usersv3.GetUsersRequest) (*usersv3.GetUsersResponse, error) {
 	op := "server.GetAllUsers"
 	users, err := s.user.Users(ctx)
 	if errors.Is(err, constants.ErrUserNotFound) {
