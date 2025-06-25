@@ -1,7 +1,6 @@
 package grpcusers
 
 import (
-	"context"
 	interceptorsvalidator "crm/go_libs/interceptors"
 	users "crm/services/users/internal/grpc"
 	"crm/services/users/pkg/redis"
@@ -18,13 +17,8 @@ type App struct {
 }
 
 func New(log *slog.Logger, port int, userService users.User, cache *redis.Client) *App {
-	var gRPCServer *grpc.Server
-	if cache.Ping(context.Background()) == nil {
-		gRPCServer = grpc.NewServer(grpc.ChainUnaryInterceptor(interceptorsvalidator.NewValidationInterceptor(log), interceptorsvalidator.CacheUnaryInterceptor(cache, log)))
-	} else {
-		gRPCServer = grpc.NewServer(grpc.ChainUnaryInterceptor(interceptorsvalidator.NewValidationInterceptor(log)))
+	gRPCServer := grpc.NewServer(grpc.ChainUnaryInterceptor(interceptorsvalidator.NewValidationInterceptor(log), interceptorsvalidator.CacheUnaryInterceptor(cache, log)))
 
-	}
 	users.Register(gRPCServer, log, userService)
 	return &App{log, gRPCServer, port}
 }

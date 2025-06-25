@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	gologger "crm/go_libs/logger"
 	migratorgorm "crm/go_libs/migrator"
 	databaseusers "crm/services/users/database"
@@ -11,16 +10,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
 	migratorgorm.Migrate(cfg.DbUrl, logger, &databaseusers.Countries{}, &databaseusers.Users{})
-	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl, cfg.Redis, ctx)
+	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl, cfg.Redis)
 	go application.GRPCSrv.MustRun()
 	GrpcStop(application, logger)
 }
