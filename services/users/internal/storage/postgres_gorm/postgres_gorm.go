@@ -102,7 +102,8 @@ func (s *Storage) SearchUserByCredentials(ctx context.Context, usersCred *databa
 
 func (s *Storage) UserUpdate(ctx context.Context, users *databaseusers.Users) (user *databaseusers.Users, err error) {
 	const op = "storage.postgresgorm.UserUpdate"
-	result := s.db.Model(&databaseusers.Users{}).Where("id = ?", users.ID).Updates(users)
+	var tmp databaseusers.Users
+	result := s.db.Where("id = ?", users.ID).First(&tmp)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			s.logger.Error(op, gorm.ErrRecordNotFound)
@@ -111,12 +112,14 @@ func (s *Storage) UserUpdate(ctx context.Context, users *databaseusers.Users) (u
 		s.logger.Error(op, result.Error)
 		return nil, result.Error
 	}
+	result = s.db.Updates(users)
 	return users, nil
 }
 
 func (s *Storage) UserDelete(ctx context.Context, id uint32) (err error) {
 	const op = "storage.postgresgorm.UserDelete"
-	result := s.db.Delete(&databaseusers.Users{}, id)
+	var tmp *databaseusers.Users
+	result := s.db.Where("id = ?", id).First(&tmp)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			s.logger.Error(op, gorm.ErrRecordNotFound)
@@ -125,6 +128,7 @@ func (s *Storage) UserDelete(ctx context.Context, id uint32) (err error) {
 		s.logger.Error(op, result.Error)
 		return result.Error
 	}
+	result = s.db.Delete(&tmp)
 	return nil
 }
 
