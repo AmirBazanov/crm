@@ -29,7 +29,6 @@ func CacheUnaryInterceptor(cache *redis.Client, logger *slog.Logger) grpc.UnaryS
 			respType := getResponseTypeForMethod(info.FullMethod)
 			if err := json.Unmarshal([]byte(cachedStr), respType); err == nil {
 				logger.Info("cache hit", "method", info.FullMethod)
-
 				return respType, nil
 			}
 		}

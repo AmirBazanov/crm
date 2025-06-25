@@ -18,6 +18,7 @@ type App struct {
 
 func New(log *slog.Logger, port int, userService users.User, cache *redis.Client) *App {
 	gRPCServer := grpc.NewServer(grpc.ChainUnaryInterceptor(interceptorsvalidator.NewValidationInterceptor(log), interceptorsvalidator.CacheUnaryInterceptor(cache, log)))
+
 	users.Register(gRPCServer, log, userService)
 	return &App{log, gRPCServer, port}
 }
