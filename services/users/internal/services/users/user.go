@@ -5,21 +5,31 @@ import (
 	"crm/go_libs/storage/constants"
 	databaseusers "crm/services/users/database"
 	postgresgorm "crm/services/users/internal/storage/postgres_gorm"
+	"crm/services/users/pkg/redis"
+	"encoding/json"
 	"errors"
 	"log/slog"
+	"strconv"
 )
 
 type User struct {
 	logger *slog.Logger
 	db     *postgresgorm.Storage
+	cache  *redis.Client
+}
+
+type Cache interface {
+	Set(key string, value interface{}, ctx context.Context) error
+	Get(key string, ctx context.Context) (string, error)
+	Del(key string, ctx context.Context)
 }
 
 type UserCreate interface {
-	UserCreate(ctx context.Context, users *databaseusers.Users) (id string, err error)
+	UserCreate(ctx context.Context, users *databaseusers.Users) (id uint32, err error)
 }
 
 type UserGetBy interface {
-	UserByID(ctx context.Context, id string) (users *databaseusers.Users, err error)
+	UserByID(ctx context.Context, id uint32) (users *databaseusers.Users, err error)
 	UserByUsername(ctx context.Context, username string) (users *databaseusers.Users, err error)
 	UserByEmail(ctx context.Context, email string) (users *databaseusers.Users, err error)
 	UsersGet(ctx context.Context) (users []*databaseusers.Users, err error)
@@ -30,17 +40,18 @@ type UserUpdate interface {
 }
 
 type UserDelete interface {
-	UserDelete(ctx context.Context, id string) (err error)
+	UserDelete(ctx context.Context, id uint32) (err error)
 }
 
 type SearchByCredentials interface {
 	SearchUserByCredentials(ctx context.Context, usersCred *databaseusers.Users) (users []*databaseusers.Users, err error)
 }
 
-func New(logger *slog.Logger, db *postgresgorm.Storage) *User {
+func New(logger *slog.Logger, db *postgresgorm.Storage, cache *redis.Client) *User {
 	return &User{
 		logger: logger,
 		db:     db,
+		cache:  cache,
 	}
 }
 
@@ -62,6 +73,16 @@ func (u *User) Create(ctx context.Context, users *databaseusers.Users) (id uint3
 func (u *User) GetById(ctx context.Context, id uint32) (users *databaseusers.Users, err error) {
 	const op = "User.GetById"
 	u.logger.Info("getting user", op, id)
+	u.logger.Info("getting user from cache", op, id)
+	cached, err := u.cache.Get(strconv.Itoa(int(id)), ctx)
+	if err == nil && cached != "" {
+		if err := json.Unmarshal([]byte(cached), &users); err == nil {
+			return users, nil
+		}
+	} else {
+		u.logger.Info("no user in cache", op, id)
+	}
+
 	resUser, resErr := u.db.UserByID(ctx, id)
 	if errors.Is(resErr, constants.ErrUserNotFound) {
 		u.logger.Warn(op, constants.ErrUserNotFound)
@@ -71,6 +92,14 @@ func (u *User) GetById(ctx context.Context, id uint32) (users *databaseusers.Use
 		u.logger.Error(op, resErr)
 		return nil, resErr
 	}
+	u.logger.Info("caching user", op, resUser.ID)
+	if bytes, err := json.Marshal(&resUser); err == nil && cached == "" {
+		err := u.cache.Set(strconv.Itoa(int(id)), string(bytes), ctx)
+		if err != nil {
+			u.logger.Error("error caching user", op, err)
+		}
+	}
+
 	return resUser, nil
 }
 
