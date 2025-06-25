@@ -52,6 +52,8 @@ services:
 
   redis:
     image: redis:alpine
+    environment:
+      - REDIS_PASSWORD=redis
     ports:
       - "6379:6379"
 
