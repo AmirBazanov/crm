@@ -28,10 +28,19 @@ type LoggerConfig struct {
 func MustLoad() *Config {
 	configPath := fetchConfigPath()
 	if configPath == "" {
-		panic("config path is empty")
+		return MustLoadEnv()
 	}
 
 	return MustLoadPath(configPath)
+}
+
+func MustLoadEnv() *Config {
+	var config Config
+	err := cleanenv.ReadEnv(&config)
+	if err != nil {
+		panic("config env read error: " + err.Error())
+	}
+	return &config
 }
 
 func MustLoadPath(configPath string) *Config {
