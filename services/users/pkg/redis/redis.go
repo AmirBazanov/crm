@@ -11,18 +11,12 @@ type Client struct {
 	logger *slog.Logger
 }
 
-func NewClient(logger *slog.Logger, addr string, password string, db int, ctx context.Context) (*Client, error) {
+func NewClient(logger *slog.Logger, addr string, password string, db int) (*Client, error) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: password,
 		DB:       db,
 	})
-	_, err := rdb.Ping(ctx).Result()
-	if err != nil {
-		logger.Error("redis ping error:", err)
-		return nil, err
-	}
-	logger.Info("redis ping success")
 	return &Client{rdb, logger}, nil
 }
 
@@ -33,7 +27,14 @@ func (c *Client) Close() {
 		return
 	}
 }
-
+func (c *Client) Ping(ctx context.Context) (err error) {
+	_, err = c.client.Ping(ctx).Result()
+	if err != nil {
+		c.logger.Error("redis ping error:", err)
+		return err
+	}
+	return nil
+}
 func (c *Client) Set(key string, value interface{}, ctx context.Context) error {
 	return c.client.Set(ctx, key, value, 0).Err()
 }
