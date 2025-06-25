@@ -28,7 +28,15 @@ jobs:
     - name: Run gRPC server in background
       run: |
         ./users &
-        sleep 2 
+        sleep 2
+      env:
+        ENV: ${{ vars.ENV }}
+        DB_URL: ${{ vars.DB_URL }}
+        GRPC_PORT: ${{ vars.GRPC_PORT }}
+        GRPC_TIMEOUT: ${{ vars.GRPC_TIMEOUT }}
+        LOGGER_SERVICE: ${{ vars.LOGGER_SERVICE }}
+        LOGGER_LOG_LEVEL: ${{ vars.LOGGER_LOG_LEVEL }}
+        LOGGER_LOG_FILE: ${{ vars.LOGGER_LOG_FILE }}
 
     - name: Test
       run: go test crm/services/users/tests
