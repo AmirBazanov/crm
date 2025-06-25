@@ -30,9 +30,9 @@ jobs:
         ./users &
         sleep 2
       env:
-        ENV: ${{ vars.ENV }}
-        DB_URL: ${{ vars.DB_URL }}
-        GRPC_PORT: ${{ vars.GRPC_PORT }}
+        Env: ${{ vars.ENV }}
+        DbURL: ${{ vars.DB_URL }}
+        GrpcPort: ${{ vars.GRPC_PORT }}
         GRPC_TIMEOUT: ${{ vars.GRPC_TIMEOUT }}
         LOGGER_SERVICE: ${{ vars.LOGGER_SERVICE }}
         LOGGER_LOG_LEVEL: ${{ vars.LOGGER_LOG_LEVEL }}
