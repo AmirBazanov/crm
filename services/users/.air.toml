@@ -3,7 +3,7 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  args_bin = ["--config=./config/local.yaml"]
+  args_bin = ["--config=./config/local_git.yaml"]
   bin = "tmp\\main.exe"
   cmd = "go build -o ./tmp/main.exe ./cmd/users"
   delay = 1000
