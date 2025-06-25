@@ -23,8 +23,8 @@ func New(logger *slog.Logger, grpcPort int, dbUrl string, redisCfg config.RedisC
 	if err != nil {
 		panic(err)
 	}
-	userService := users.New(logger, storage, cache)
-	grpcApp := grpcusers.New(logger, grpcPort, userService)
+	userService := users.New(logger, storage)
+	grpcApp := grpcusers.New(logger, grpcPort, userService, cache)
 
 	return &App{
 		GRPCSrv: grpcApp,

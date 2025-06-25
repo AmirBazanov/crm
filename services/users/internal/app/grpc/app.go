@@ -3,6 +3,7 @@ package grpcusers
 import (
 	interceptorsvalidator "crm/go_libs/interceptors"
 	users "crm/services/users/internal/grpc"
+	"crm/services/users/pkg/redis"
 	"fmt"
 	"google.golang.org/grpc"
 	"log/slog"
@@ -15,8 +16,8 @@ type App struct {
 	port       int
 }
 
-func New(log *slog.Logger, port int, userService users.User) *App {
-	gRPCServer := grpc.NewServer(grpc.UnaryInterceptor(interceptorsvalidator.NewValidationInterceptor(log)))
+func New(log *slog.Logger, port int, userService users.User, cache *redis.Client) *App {
+	gRPCServer := grpc.NewServer(grpc.ChainUnaryInterceptor(interceptorsvalidator.NewValidationInterceptor(log), interceptorsvalidator.CacheUnaryInterceptor(cache, log)))
 	users.Register(gRPCServer, log, userService)
 	return &App{log, gRPCServer, port}
 }
