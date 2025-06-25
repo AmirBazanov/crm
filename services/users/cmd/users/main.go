@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-	//TODO: DB HEALTH CHECK
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
 	migratorgorm.Migrate(cfg.DbUrl, logger, &databaseusers.Countries{}, &databaseusers.Users{})
