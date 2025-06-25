@@ -12,6 +12,13 @@ type Config struct {
 	DbUrl  string       `yaml:"db_url" env-required:"true"`
 	GRPC   GRPCConfig   `yaml:"grpc"`
 	Logger LoggerConfig `yaml:"logger"`
+	Redis  RedisConfig  `yaml:"redis"`
+}
+
+type RedisConfig struct {
+	Addr     string `yaml:"addr" env-required:"true"`
+	Password string `yaml:"password" env-required:"true"`
+	DB       int    `yaml:"db" env-default:"0"`
 }
 
 type GRPCConfig struct {
