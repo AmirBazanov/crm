@@ -1,7 +1,6 @@
 package app
 
 import (
-	"context"
 	grpcusers "crm/services/users/internal/app/grpc"
 	"crm/services/users/internal/config"
 	"crm/services/users/internal/services/users"
@@ -14,9 +13,9 @@ type App struct {
 	GRPCSrv *grpcusers.App
 }
 
-func New(logger *slog.Logger, grpcPort int, dbUrl string, redisCfg config.RedisConfig, ctx context.Context) *App {
+func New(logger *slog.Logger, grpcPort int, dbUrl string, redisCfg config.RedisConfig) *App {
 	storage, err := postgresgorm.New(logger, dbUrl)
-	cache, errRed := redis.NewClient(logger, redisCfg.Addr, redisCfg.Password, redisCfg.DB, ctx)
+	cache, errRed := redis.NewClient(logger, redisCfg.Addr, redisCfg.Password, redisCfg.DB)
 	if errRed != nil {
 		logger.Error("Cannot connect to redis", errRed)
 	}
