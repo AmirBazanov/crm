@@ -1,7 +1,7 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
-name: Go
+name: Go Build and Test Users Service
 
 on:
   push:
@@ -12,7 +12,6 @@ on:
 jobs:
 
   build:
-    environment: dev
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -27,16 +26,8 @@ jobs:
 
     - name: Run gRPC server in background
       run: |
-        ./users &
-        sleep 2
-      env:
-        Env: ${{ vars.ENV }}
-        DbURL: ${{ vars.DB_URL }}
-        GrpcPort: ${{ vars.GRPC_PORT }}
-        GRPC_TIMEOUT: ${{ vars.GRPC_TIMEOUT }}
-        LOGGER_SERVICE: ${{ vars.LOGGER_SERVICE }}
-        LOGGER_LOG_LEVEL: ${{ vars.LOGGER_LOG_LEVEL }}
-        LOGGER_LOG_FILE: ${{ vars.LOGGER_LOG_FILE }}
+        ./users --config=/home/runner/work/crm/crm/services/users/config/local_git.yaml &
+        sleep 2 
 
     - name: Test
       run: go test crm/services/users/tests
