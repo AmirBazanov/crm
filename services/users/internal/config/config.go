@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/ilyakaznacheev/cleanenv"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -36,8 +37,17 @@ func MustLoad() *Config {
 	configPath := fetchConfigPath()
 	if configPath == "" {
 		return MustLoadEnv()
+	} else if strings.Contains(configPath, "crypt") {
+		file, err := LoadEncryptedConfigFile(configPath, []byte(os.Getenv("ENCRYPTED_CONFIG_FILE")))
+		if err != nil {
+			panic("cannot load encrypted config" + err.Error())
+		}
+		return file
 	}
-
+	_, err := EncryptConfigFile(configPath, configPath+"crypt", []byte(os.Getenv("ENCRYPTED_CONFIG_FILE")))
+	if err != nil {
+		panic("cant crypt config" + err.Error())
+	}
 	return MustLoadPath(configPath)
 }
 
