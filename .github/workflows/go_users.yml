@@ -26,8 +26,9 @@ jobs:
 
     - name: Run gRPC server in background
       run: |
-        ./users --config=/home/runner/work/crm/crm/services/users/config/local_git.yaml &
+        ./users --config=/home/runner/work/crm/crm/services/users/config/local_git.yamlcrypt &
         sleep 6 
-
+      env:
+          ENCRYPTED_CONFIG_FILE: ${{ secrets.ENCRYPTED_CONFIG_FILE }}
     - name: Test
       run: go test crm/services/users/tests
