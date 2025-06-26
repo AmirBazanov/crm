@@ -1,13 +1,1 @@
-env: "local"
-db_url: "postgresql://neondb_owner:npg_jbgn12SHBDck@ep-ancient-hall-a9rdq4vt-pooler.gwc.azure.neon.tech/users?sslmode=require"
-grpc:
-  port: 4000
-  timeout: 10h
-logger:
-  service: "users"
-  log_level: "debug"
-  log_file: "../../logs/users.log"
-redis:
-  addr: "localhost:6379"
-  password: "redis"
-  db: 0
+
