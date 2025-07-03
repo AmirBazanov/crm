@@ -44,10 +44,12 @@ func MustLoad() *Config {
 		}
 		return file
 	}
-	_, err := EncryptConfigFile(configPath, configPath+"crypt", []byte(os.Getenv("ENCRYPTED_CONFIG_FILE")))
-	if err != nil {
-		panic("cant crypt config" + err.Error())
-	}
+
+	// TODO: Add script for config encrypting
+	//_, err := EncryptConfigFile(configPath, configPath+"crypt", []byte(os.Getenv("ENCRYPTED_CONFIG_FILE")))
+	//if err != nil {
+	//	panic("cant crypt config" + err.Error())
+	//}
 	return MustLoadPath(configPath)
 }
 
