@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { AuthRegisterDto } from '../../../libs/dto/auth.dto';
+import { AuthLoginDto, AuthRegisterDto } from '../../../libs/dto/auth.dto';
 import { mapPrismaErrorToRpcError } from '../../../libs/exeptions-mapper/prisma-to-grpc.mapper';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from '../../../libs/logger/logger.service';
@@ -12,7 +12,7 @@ export class AuthService {
     private prisma: PrismaService,
     private readonly logger: WinstonLoggerService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async register(dto: AuthRegisterDto) {
     try {
@@ -26,6 +26,25 @@ export class AuthService {
       this.logger.error(err.message, err.trace);
       throw mapPrismaErrorToRpcError(err);
     }
+  }
+  // TODO: test throwing error (should be http type)
+  async login(dto: AuthLoginDto) {
+    const user = await this.prisma.userCredential.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const isPasswordValid = await this.comparePasswords(
+      dto.password,
+      user.password,
+    );
+    if (!isPasswordValid) {
+      throw new Error('Invalid password');
+    }
+    return user;
   }
 
   private async hashPassword(password: string): Promise<string> {
