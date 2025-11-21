@@ -5,7 +5,7 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
-import { UserGetDto } from './user.dto';
+import { UserDto } from './user.dto';
 import { Type } from 'class-transformer';
 
 export class AuthRegisterDto {
@@ -24,8 +24,8 @@ export class AuthDtoResp {
   @IsJWT()
   refreshToken: string;
   @ValidateNested()
-  @Type(() => UserGetDto)
-  user: UserGetDto;
+  @Type(() => UserDto)
+  user: UserDto;
 }
 export class AuthLoginDto {
   @IsEmail()
