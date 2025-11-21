@@ -13,14 +13,14 @@ import { LoggerModule } from '../../../../libs/logger/logger.module';
         transport: Transport.GRPC,
         options: {
           package: 'auth',
-          protoPath: join(__dirname, '..', '..', 'proto', 'auth', 'v1','auth.proto'),
+          protoPath: join(__dirname, '..', '..', 'proto', 'auth', 'v1', 'auth.proto'),
           url: '0.0.0.0:5001',
         },
       },
     ]),
-    LoggerModule.forService('gateway'),
+    LoggerModule.forService('gateway/auth'),
   ],
   controllers: [AuthController],
-  providers: [AuthService, { provide: 'APP_NAME', useValue: 'gateway' }],
+  providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }
