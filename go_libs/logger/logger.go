@@ -17,7 +17,6 @@ var (
 	logger *slog.Logger
 )
 
-// InitLogger инициализирует глобальный логгер.
 func InitLogger(service string, logLevel string, logFile string) *slog.Logger {
 	once.Do(func() {
 		level := getLogLevel(logLevel)
@@ -61,13 +60,11 @@ func (c *CustomHandler) Handle(_ context.Context, record slog.Record) error {
 	timestamp := record.Time.UTC().Format(time.RFC3339Nano)
 	level := strings.ToUpper(record.Level.String())
 
-	// Формируем основное сообщение
 	message := record.Message
 
-	// Считываем ключи и значения
 	var attrs []string
 	record.Attrs(func(a slog.Attr) bool {
-		attrs = append(attrs, fmt.Sprintf("%s=%v", a.Key, a.Value.Any()))
+		attrs = append(attrs, fmt.Sprintf("%s=%v", a.Key, a.Value.String()))
 		return true
 	})
 
@@ -76,7 +73,6 @@ func (c *CustomHandler) Handle(_ context.Context, record slog.Record) error {
 		extra = " " + strings.Join(attrs, " ")
 	}
 
-	// Печатаем в нужном формате
 	_, err := fmt.Fprintf(c.Writer, "%s [%s] [%s] %s%s\n", timestamp, level, c.Service, message, extra)
 	return err
 }
@@ -112,7 +108,6 @@ func createHandler(level slog.Level, service string, logFile string) slog.Handle
 	}
 }
 
-// GetLogger возвращает инициализированный логгер (если InitLogger уже был вызван).
 func GetLogger() *slog.Logger {
 	if logger == nil {
 		panic("Logger is not initialized. Call InitLogger first.")
