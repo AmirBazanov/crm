@@ -2,10 +2,11 @@ package config
 
 import (
 	"flag"
-	"github.com/ilyakaznacheev/cleanenv"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
@@ -14,6 +15,13 @@ type Config struct {
 	GRPC   GRPCConfig   `yaml:"grpc"`
 	Logger LoggerConfig `yaml:"logger"`
 	Redis  RedisConfig  `yaml:"redis"`
+	Kafka  KafkaConfig  `yaml:"kafka"`
+}
+
+type KafkaConfig struct {
+	Brokers []string `yaml:"brokers" env-required:"true"`
+	Topic   string   `yaml:"topic" env-required:"true"`
+	GroupID string   `yaml:"group_id" env-required:"true"`
 }
 
 type RedisConfig struct {

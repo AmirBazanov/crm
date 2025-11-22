@@ -7,3 +7,8 @@ logger:
   service: "users"
   log_level: "debug"
   log_file: "../../logs/users.log"
+kafka:
+  brokers:
+    - "localhost:9092"
+  topic: "created_user"
+  group_id: "users-service"
