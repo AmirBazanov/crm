@@ -46,6 +46,22 @@ message GetUserRequest {
     uint32 id = 1 [(buf.validate.field).uint32.gte=0];
 }
 
+message GetUserByNicknameRequest{
+    string nickname = 1 [(buf.validate.field).string.min_len=3];
+}
+
+message GetUserByNicknameResponse{
+    User user = 1;
+}
+
+message GetUserByEmailRequest{
+    string email = 1 [(buf.validate.field).string.email=true];
+}
+
+message GetUserByEmailResponse{
+    User user = 1;
+}
+
 message GetUserResponse {
     User user = 1;
 }
@@ -103,4 +119,7 @@ service UserService {
     rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
     rpc GetUsers(GetUsersRequest) returns (GetUsersResponse);
     rpc Search(SearchUsersRequest) returns (SearchUsersResponse);
+    rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserByEmailResponse);
+    rpc GetUserByNickname(GetUserByNicknameRequest) returns (GetUserByNicknameResponse);
+
 }
