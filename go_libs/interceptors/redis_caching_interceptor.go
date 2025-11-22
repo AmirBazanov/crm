@@ -6,9 +6,10 @@ import (
 	"crm/services/users/pkg/redis"
 	"encoding/json"
 	"fmt"
-	"google.golang.org/grpc"
 	"log/slog"
 	"strings"
+
+	"google.golang.org/grpc"
 )
 
 var Cache *redis.Client
@@ -51,7 +52,7 @@ func getFromCache(ctx context.Context, key string, fullMethod string) (data inte
 			return respType, nil
 		}
 	}
-	return "", er
+	return nil, er
 }
 
 func setCache(ctx context.Context, data interface{}, key string, fullMethod string) error {
@@ -102,6 +103,10 @@ var responseTypeMap = map[string]func() interface{}{
 	"/users.v3.UserService/Search": func() interface{} {
 		return &usersv3.SearchUsersResponse{}
 	},
+	"/users.v3.UserService/GetUserByNickname": func() interface{} {
+		return &usersv3.GetUserByNicknameResponse{}
+	},
+
 	"/users.v3.UserService/UpdateUser": func() interface{} { return &usersv3.UpdateUserResponse{} },
 	"/users.v3.UserService/DeleteUser": func() interface{} { return &usersv3.DeleteUserResponse{} },
 }
