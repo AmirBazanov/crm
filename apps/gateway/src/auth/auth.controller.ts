@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, Post, UseFilters } from '@nestjs/common';
+import { Body, Controller, HttpException, Post, UseFilters, ValidationPipe } from '@nestjs/common';
 import {
   AuthDtoResp,
   AuthLoginDto,

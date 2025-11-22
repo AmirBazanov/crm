@@ -17,10 +17,11 @@ export class AuthService implements OnModuleInit {
     this.authService = this.client.getService<AuthServiceClient>('AuthService');
   }
   async register(dto: AuthRegisterDto) {
+    const op = "auth.service.register "
     try {
       return await lastValueFrom(this.authService.register(dto));
     } catch (err) {
-      this.logger.error(err.message, err.stack);
+      this.logger.error(op + err.message, err.stack);
       throw mapGrpcErrorToHttp(err);
     }
   }

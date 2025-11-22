@@ -12,8 +12,8 @@ import { LoggerModule } from '../../../../libs/logger/logger.module';
         name: 'AUTH_PACKAGE',
         transport: Transport.GRPC,
         options: {
-          package: 'auth',
-          protoPath: join(__dirname, '..', '..', 'proto', 'auth', 'v1', 'auth.proto'),
+          package: 'auth.v2',
+          protoPath: join(__dirname, '..', '..', 'proto', 'auth', 'v2', 'auth.proto'),
           url: '0.0.0.0:5001',
         },
       },
