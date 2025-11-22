@@ -3,10 +3,15 @@ version: v2
 modules:
   - path: ./proto
 lint:
+  ignore:
+    - proto/users/v3/buf/validate/validate.proto
+
   use:
     - STANDARD
 breaking:
   use:
     - FILE
+  ignore:
+    - proto/users/v3/buf/validate/validate.proto
 deps:
   - buf.build/bufbuild/protovalidate
