@@ -4,8 +4,9 @@ import {
   AuthLoginRequest,
   AuthRegisterRequest,
   AuthServiceController,
-} from '../../../proto/gen/ts/auth/v1/auth';
+} from '../../../proto/gen/ts/auth/v2/auth';
 import { AuthService } from './auth.service';
+
 
 @Controller()
 // @ts-ignore
