@@ -10,6 +10,7 @@ import (
 	databaseusers "crm/services/users/database"
 	"crm/services/users/internal/tools/convert"
 	"errors"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -20,7 +21,7 @@ import (
 type User interface {
 	Create(ctx context.Context, users *databaseusers.Users) (id uint32, err error)
 	GetById(ctx context.Context, id uint32) (users *databaseusers.Users, err error)
-	GetByUsername(ctx context.Context, username string) (users *databaseusers.Users, err error)
+	GetByNickname(ctx context.Context, username string) (users *databaseusers.Users, err error)
 	GetByEmail(ctx context.Context, email string) (users *databaseusers.Users, err error)
 	Update(ctx context.Context, users *databaseusers.Users) (user *databaseusers.Users, err error)
 	Delete(ctx context.Context, id uint32) (err error)
@@ -144,4 +145,34 @@ func (s *serverAPI) DeleteUser(ctx context.Context, req *usersv3.DeleteUserReque
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &usersv3.DeleteUserResponse{}, nil
+}
+
+func (s *serverAPI) GetUserByNickname(ctx context.Context, req *usersv3.GetUserByNicknameRequest) (*usersv3.GetUserByNicknameResponse, error) {
+	op := "server.GetUserByNickname"
+	user, err := s.user.GetByNickname(ctx, req.Nickname)
+	if errors.Is(err, constants.ErrUserNotFound) {
+		s.logger.Error(op, err)
+		return nil, status.Error(codes.NotFound, err.Error())
+	}
+	if err != nil {
+		s.logger.Error(op, err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	return &usersv3.GetUserByNicknameResponse{User: convert.UserDbtoGrpcUser(user)}, nil
+}
+
+func (s *serverAPI) GetUserByEmail(ctx context.Context, req *usersv3.GetUserByEmailRequest) (*usersv3.GetUserByEmailResponse, error) {
+	op := "server.GetUserByEmail"
+	user, err := s.user.GetByEmail(ctx, req.Email)
+	if errors.Is(err, constants.ErrUserNotFound) {
+		s.logger.Error(op, err)
+		return nil, status.Error(codes.NotFound, err.Error())
+
+	}
+	if err != nil {
+		s.logger.Error(op, err)
+		return nil, status.Error(codes.Internal, err.Error())
+
+	}
+	return &usersv3.GetUserByEmailResponse{User: convert.UserDbtoGrpcUser(user)}, nil
 }

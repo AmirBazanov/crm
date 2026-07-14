@@ -1,9 +1,8 @@
 package main
 
 import (
+	"context"
 	gologger "crm/go_libs/logger"
-	migratorgorm "crm/go_libs/migrator"
-	databaseusers "crm/services/users/database"
 	"crm/services/users/internal/app"
 	"crm/services/users/internal/config"
 	"log/slog"
@@ -15,9 +14,10 @@ import (
 func main() {
 	cfg := config.MustLoad()
 	logger := setupLogger(cfg)
-	migratorgorm.Migrate(cfg.DbUrl, logger, &databaseusers.Countries{}, &databaseusers.Users{})
-	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl, cfg.Redis)
+	// migratorgorm.Migrate(cfg.DbUrl, logger, &databaseusers.Countries{}, &databaseusers.Users{})
+	application := app.New(logger, cfg.GRPC.Port, cfg.DbUrl, cfg.Redis, cfg.Kafka)
 	go application.GRPCSrv.MustRun()
+	go application.Consumer.Start(context.Background())
 	GrpcStop(application, logger)
 }
 
@@ -32,5 +32,8 @@ func GrpcStop(app *app.App, logger *slog.Logger) {
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)
 	sign := <-stop
 	app.GRPCSrv.Stop()
+	if err := app.Consumer.Stop(); err != nil {
+		logger.Error("failed to stop consumer", "error", err)
+	}
 	logger.Info("Application stopped", "signal", sign)
 }

@@ -10,13 +10,12 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        protoPath: join(__dirname, '../../proto/auth.proto'),
-        package: 'auth',
+        protoPath: join(__dirname, '../../proto/auth/v2/auth.proto'),
+        package: 'auth.v2',
         url: '0.0.0.0:5001',
       },
     },
   );
-  app.useGlobalPipes(new ValidationPipe());
   await app.listen();
 }
 bootstrap();

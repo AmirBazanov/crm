@@ -45,3 +45,14 @@ func (c *Cache) GetFromCache(ctx context.Context, key string) (data interface{},
 	}
 	return nil, err
 }
+
+func (c *Cache) DelFromCache(ctx context.Context, key string) (error error) {
+	op := "storage.RedisCache.DelFromCache"
+	err := c.redis.Del(key, ctx)
+	if err != nil {
+		c.logger.Error("error caching", op, err)
+		return err
+	}
+	c.logger.Info("cached del", op, key)
+	return nil
+}

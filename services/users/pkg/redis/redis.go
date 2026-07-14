@@ -30,7 +30,7 @@ func (c *Client) Close() {
 func (c *Client) Ping(ctx context.Context) (err error) {
 	_, err = c.client.Ping(ctx).Result()
 	if err != nil {
-		c.logger.Error("redis ping error:", err)
+		c.logger.Error("redis ping error: " + err.Error())
 		return err
 	}
 	return nil

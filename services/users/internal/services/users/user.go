@@ -4,40 +4,27 @@ import (
 	"context"
 	"crm/go_libs/storage/constants"
 	databaseusers "crm/services/users/database"
-	postgresgorm "crm/services/users/internal/storage/postgres_gorm"
 	"errors"
 	"log/slog"
 )
 
 type User struct {
 	logger *slog.Logger
-	db     *postgresgorm.Storage
+	db     Storage
 }
 
-type UserCreate interface {
-	UserCreate(ctx context.Context, users *databaseusers.Users) (id string, err error)
-}
-
-type UserGetBy interface {
-	UserByID(ctx context.Context, id string) (users *databaseusers.Users, err error)
-	UserByUsername(ctx context.Context, username string) (users *databaseusers.Users, err error)
+type Storage interface {
+	UserByID(ctx context.Context, id uint32) (users *databaseusers.Users, err error)
+	UserByNickname(ctx context.Context, username string) (users *databaseusers.Users, err error)
 	UserByEmail(ctx context.Context, email string) (users *databaseusers.Users, err error)
 	UsersGet(ctx context.Context) (users []*databaseusers.Users, err error)
-}
-
-type UserUpdate interface {
+	UserCreate(ctx context.Context, users *databaseusers.Users) (id uint32, err error)
 	UserUpdate(ctx context.Context, users *databaseusers.Users) (user *databaseusers.Users, err error)
-}
-
-type UserDelete interface {
-	UserDelete(ctx context.Context, id string) (err error)
-}
-
-type SearchByCredentials interface {
+	UserDelete(ctx context.Context, id uint32) (err error)
 	SearchUserByCredentials(ctx context.Context, usersCred *databaseusers.Users) (users []*databaseusers.Users, err error)
 }
 
-func New(logger *slog.Logger, db *postgresgorm.Storage) *User {
+func New(logger *slog.Logger, db Storage) *User {
 	return &User{
 		logger: logger,
 		db:     db,
@@ -46,7 +33,7 @@ func New(logger *slog.Logger, db *postgresgorm.Storage) *User {
 
 func (u *User) Create(ctx context.Context, users *databaseusers.Users) (id uint32, err error) {
 	const op = "User.Create"
-	u.logger.Info("creating user", op, users.ID)
+	u.logger.Info("creating user", op, users.Nickname)
 	resId, resErr := u.db.UserCreate(ctx, users)
 	if errors.Is(resErr, constants.ErrUserAlreadyExists) {
 		u.logger.Warn(op, constants.ErrUserAlreadyExists)
@@ -74,16 +61,16 @@ func (u *User) GetById(ctx context.Context, id uint32) (users *databaseusers.Use
 	return resUser, nil
 }
 
-func (u *User) GetByUsername(ctx context.Context, username string) (users *databaseusers.Users, err error) {
-	const op = "User.GetByUsername"
-	u.logger.Info("getting user by username", op, username)
-	resUser, resErr := u.db.UserByUsername(ctx, username)
+func (u *User) GetByNickname(ctx context.Context, nickname string) (users *databaseusers.Users, err error) {
+	const op = "User.GetByNickname"
+	u.logger.Info("getting user by nickname", op, nickname)
+	resUser, resErr := u.db.UserByNickname(ctx, nickname)
 	if errors.Is(resErr, constants.ErrUserNotFound) {
-		u.logger.Warn(op, constants.ErrUserNotFound)
+		u.logger.Warn(op, constants.ErrUserNotFound.Error())
 		return nil, constants.ErrUserNotFound
 	}
 	if resErr != nil {
-		u.logger.Error(op, resErr)
+		u.logger.Error(op, resErr.Error())
 		return nil, resErr
 	}
 	return resUser, nil

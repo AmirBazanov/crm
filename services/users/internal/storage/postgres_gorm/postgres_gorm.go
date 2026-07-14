@@ -19,7 +19,7 @@ type Storage struct {
 }
 
 func New(log *slog.Logger, dbUrl string) (*Storage, error) {
-	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{Logger: &slogapapter.SlogAdapter{Log: log}})
+	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{Logger: &slogapapter.SlogAdapter{Log: log, Level: 0}})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %v", err)
 	}
@@ -71,10 +71,10 @@ func (s *Storage) UserByID(ctx context.Context, id uint32) (users *databaseusers
 	return users, nil
 }
 
-func (s *Storage) UserByUsername(ctx context.Context, username string) (users *databaseusers.Users, err error) {
-	const op = "storage.postgresgorm.UserByUsername"
+func (s *Storage) UserByNickname(ctx context.Context, nickname string) (users *databaseusers.Users, err error) {
+	const op = "storage.postgresgorm.UserByNickname"
 	users = &databaseusers.Users{}
-	result := s.db.Where("username = ?", username).First(users)
+	result := s.db.Where("nickname = ?", nickname).First(users)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			s.logger.Error(op, gorm.ErrRecordNotFound)

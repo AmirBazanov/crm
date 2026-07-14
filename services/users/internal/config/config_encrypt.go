@@ -5,9 +5,10 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"fmt"
-	"github.com/stretchr/testify/assert/yaml"
 	"io"
 	"os"
+
+	"github.com/stretchr/testify/assert/yaml"
 )
 
 func EncryptConfigFile(inputPath string, outputPath string, key []byte) (path string, error error) {

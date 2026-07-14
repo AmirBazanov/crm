@@ -53,6 +53,22 @@ export interface GetUserRequest {
   id: number;
 }
 
+export interface GetUserByNicknameRequest {
+  nickname: string;
+}
+
+export interface GetUserByNicknameResponse {
+  user: User | undefined;
+}
+
+export interface GetUserByEmailRequest {
+  email: string;
+}
+
+export interface GetUserByEmailResponse {
+  user: User | undefined;
+}
+
 export interface GetUserResponse {
   user: User | undefined;
 }
@@ -117,6 +133,10 @@ export interface UserServiceClient {
   getUsers(request: GetUsersRequest): Observable<GetUsersResponse>;
 
   search(request: SearchUsersRequest): Observable<SearchUsersResponse>;
+
+  getUserByEmail(request: GetUserByEmailRequest): Observable<GetUserByEmailResponse>;
+
+  getUserByNickname(request: GetUserByNicknameRequest): Observable<GetUserByNicknameResponse>;
 }
 
 /** gRPC-сервис */
@@ -141,11 +161,28 @@ export interface UserServiceController {
   search(
     request: SearchUsersRequest,
   ): Promise<SearchUsersResponse> | Observable<SearchUsersResponse> | SearchUsersResponse;
+
+  getUserByEmail(
+    request: GetUserByEmailRequest,
+  ): Promise<GetUserByEmailResponse> | Observable<GetUserByEmailResponse> | GetUserByEmailResponse;
+
+  getUserByNickname(
+    request: GetUserByNicknameRequest,
+  ): Promise<GetUserByNicknameResponse> | Observable<GetUserByNicknameResponse> | GetUserByNicknameResponse;
 }
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createUser", "getUser", "updateUser", "deleteUser", "getUsers", "search"];
+    const grpcMethods: string[] = [
+      "createUser",
+      "getUser",
+      "updateUser",
+      "deleteUser",
+      "getUsers",
+      "search",
+      "getUserByEmail",
+      "getUserByNickname",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);

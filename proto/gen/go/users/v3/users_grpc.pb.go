@@ -19,12 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_CreateUser_FullMethodName = "/users.v3.UserService/CreateUser"
-	UserService_GetUser_FullMethodName    = "/users.v3.UserService/GetUser"
-	UserService_UpdateUser_FullMethodName = "/users.v3.UserService/UpdateUser"
-	UserService_DeleteUser_FullMethodName = "/users.v3.UserService/DeleteUser"
-	UserService_GetUsers_FullMethodName   = "/users.v3.UserService/GetUsers"
-	UserService_Search_FullMethodName     = "/users.v3.UserService/Search"
+	UserService_CreateUser_FullMethodName        = "/users.v3.UserService/CreateUser"
+	UserService_GetUser_FullMethodName           = "/users.v3.UserService/GetUser"
+	UserService_UpdateUser_FullMethodName        = "/users.v3.UserService/UpdateUser"
+	UserService_DeleteUser_FullMethodName        = "/users.v3.UserService/DeleteUser"
+	UserService_GetUsers_FullMethodName          = "/users.v3.UserService/GetUsers"
+	UserService_Search_FullMethodName            = "/users.v3.UserService/Search"
+	UserService_GetUserByEmail_FullMethodName    = "/users.v3.UserService/GetUserByEmail"
+	UserService_GetUserByNickname_FullMethodName = "/users.v3.UserService/GetUserByNickname"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -39,6 +41,8 @@ type UserServiceClient interface {
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
 	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
 	Search(ctx context.Context, in *SearchUsersRequest, opts ...grpc.CallOption) (*SearchUsersResponse, error)
+	GetUserByEmail(ctx context.Context, in *GetUserByEmailRequest, opts ...grpc.CallOption) (*GetUserByEmailResponse, error)
+	GetUserByNickname(ctx context.Context, in *GetUserByNicknameRequest, opts ...grpc.CallOption) (*GetUserByNicknameResponse, error)
 }
 
 type userServiceClient struct {
@@ -109,6 +113,26 @@ func (c *userServiceClient) Search(ctx context.Context, in *SearchUsersRequest, 
 	return out, nil
 }
 
+func (c *userServiceClient) GetUserByEmail(ctx context.Context, in *GetUserByEmailRequest, opts ...grpc.CallOption) (*GetUserByEmailResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserByEmailResponse)
+	err := c.cc.Invoke(ctx, UserService_GetUserByEmail_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserByNickname(ctx context.Context, in *GetUserByNicknameRequest, opts ...grpc.CallOption) (*GetUserByNicknameResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserByNicknameResponse)
+	err := c.cc.Invoke(ctx, UserService_GetUserByNickname_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
@@ -121,6 +145,8 @@ type UserServiceServer interface {
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
 	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
 	Search(context.Context, *SearchUsersRequest) (*SearchUsersResponse, error)
+	GetUserByEmail(context.Context, *GetUserByEmailRequest) (*GetUserByEmailResponse, error)
+	GetUserByNickname(context.Context, *GetUserByNicknameRequest) (*GetUserByNicknameResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -148,6 +174,12 @@ func (UnimplementedUserServiceServer) GetUsers(context.Context, *GetUsersRequest
 }
 func (UnimplementedUserServiceServer) Search(context.Context, *SearchUsersRequest) (*SearchUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserByEmail(context.Context, *GetUserByEmailRequest) (*GetUserByEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmail not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserByNickname(context.Context, *GetUserByNicknameRequest) (*GetUserByNicknameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByNickname not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -278,6 +310,42 @@ func _UserService_Search_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetUserByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserByEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserByEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserByEmail(ctx, req.(*GetUserByEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetUserByNickname_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByNicknameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserByNickname(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserByNickname_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserByNickname(ctx, req.(*GetUserByNicknameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -308,6 +376,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _UserService_Search_Handler,
+		},
+		{
+			MethodName: "GetUserByEmail",
+			Handler:    _UserService_GetUserByEmail_Handler,
+		},
+		{
+			MethodName: "GetUserByNickname",
+			Handler:    _UserService_GetUserByNickname_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

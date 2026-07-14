@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package auth.v2;
+
+option go_package = "crm-system/proto/generated/go/authv1;authv1";
+
+enum Country {
+  COUNTRY_UNSPECIFIED = 0;
+  COUNTRY_EN = 1;
+  COUNTRY_IT = 2;
+  COUNTRY_FR = 3;
+  COUNTRY_DE = 4;
+  COUNTRY_RU = 5;
+}
+message User {
+  string id = 1;
+  string email = 2;
+  string password = 3;
+  string firstname = 4 ;
+  string lastname = 5 ;
+  string nickname = 6 ;
+  Country country = 7;
+}
+
+message AuthRegisterRequest {
+  string email = 1;
+  string password = 2;
+  string firstname = 3 ;
+  string lastname = 4 ;
+  string nickname = 5 ;
+  Country country = 6;
+}
+
+message AuthRegisterResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  User user = 3;
+}
+
+message AuthLoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthLoginResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  User user = 3;
+}
+
+message AuthRefreshRequest {
+  string refresh_token = 1;
+}
+
+message AuthRefreshResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message AuthLogoutRequest {
+  string refresh_token = 1;
+}
+
+message AuthLogoutResponse {
+  string message = 1;
+}
+
+service AuthService {
+  rpc Register (AuthRegisterRequest) returns (AuthRegisterResponse);
+  rpc Login (AuthLoginRequest) returns (AuthLoginResponse);
+  rpc RefreshToken (AuthRefreshRequest) returns (AuthRefreshResponse);
+  rpc Logout (AuthLogoutRequest) returns (AuthLogoutResponse);
+}

@@ -59,3 +59,4 @@ package-lock.json
 !/package-lock.json
 /services/users/cmd/users/main.exe
 /services/users/tmp/main.exe
+services/users/config/local_git.yaml

@@ -2,10 +2,11 @@ package config
 
 import (
 	"flag"
-	"github.com/ilyakaznacheev/cleanenv"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
@@ -14,6 +15,13 @@ type Config struct {
 	GRPC   GRPCConfig   `yaml:"grpc"`
 	Logger LoggerConfig `yaml:"logger"`
 	Redis  RedisConfig  `yaml:"redis"`
+	Kafka  KafkaConfig  `yaml:"kafka"`
+}
+
+type KafkaConfig struct {
+	Brokers []string `yaml:"brokers" env-required:"true"`
+	Topic   string   `yaml:"topic" env-required:"true"`
+	GroupID string   `yaml:"group_id" env-required:"true"`
 }
 
 type RedisConfig struct {
@@ -44,10 +52,12 @@ func MustLoad() *Config {
 		}
 		return file
 	}
-	_, err := EncryptConfigFile(configPath, configPath+"crypt", []byte(os.Getenv("ENCRYPTED_CONFIG_FILE")))
-	if err != nil {
-		panic("cant crypt config" + err.Error())
-	}
+
+	// TODO: Add script for config encrypting
+	//_, err := EncryptConfigFile(configPath, configPath+"crypt", []byte(os.Getenv("ENCRYPTED_CONFIG_FILE")))
+	//if err != nil {
+	//	panic("cant crypt config" + err.Error())
+	//}
 	return MustLoadPath(configPath)
 }
 
